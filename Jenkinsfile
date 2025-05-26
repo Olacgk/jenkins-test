@@ -29,13 +29,16 @@ pipeline {
         // }
 
         // Étape 2 : Analyse SonarQube
-        stage('Analyse SonarQube') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
-                    } else {
-                        bat "${SONAR_SCANNER_HOME}\\bin\\sonar-scanner.bat -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
+         stages {
+            stage('SonarQube Analysis') {
+                steps {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        bat """
+                            sonar-scanner \
+                            -Dsonar.projectKey=jenkins \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=%SONAR_TOKEN%
+                        """
                     }
                 }
             }
