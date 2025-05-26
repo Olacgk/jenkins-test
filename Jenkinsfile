@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        SONAR_SCANNER_HOME = tool 'SonarQube'
+        SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
         SONAR_TOKEN = credentials('SonarQube_token')
     }
 
