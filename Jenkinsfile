@@ -29,13 +29,51 @@ pipeline {
         // }
 
         // Étape 2 : Analyse SonarQube
-        stage('Analyse SonarQube') {
+        // stage('Analyse SonarQube') {
+        //     steps {
+        //         script {
+        //             if (isUnix()) {
+        //                 sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner 
+        //                 -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
+        //             } else {
+        //                 bat "${SONAR_SCANNER_HOME}\\bin\\sonar-scanner.bat -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('SonarQube Analysis') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
-                    } else {
-                        bat "${SONAR_SCANNER_HOME}\\bin\\sonar-scanner.bat -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
+                withSonarQubeEnv('SonarQube') {
+                    script {
+                        def scannerHome = tool 'SonarQubeScanner'
+                        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN_SECURE')]) {
+                            if (isUnix()) {
+                                sh """
+                                    ${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=jenkins-test \
+                                    -Dsonar.projectName='jenkins-test' \
+                                    -Dsonar.java.binaries=target/classes \
+                                    -Dsonar.sources=src/main/java \
+                                    -Dsonar.tests=src/test/java \
+                                    -Dsonar.junit.reportPaths=target/surefire-reports \
+                                    -Dsonar.token=$SONAR_TOKEN_SECURE \
+                                    -Dsonar.host.url=http://host.docker.internal:9000
+                                """
+                            } else {
+                                bat """
+                                    ${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=jenkins-test \
+                                    -Dsonar.projectName='jenkins-test' \
+                                    -Dsonar.java.binaries=target/classes \
+                                    -Dsonar.sources=src/main/java \
+                                    -Dsonar.tests=src/test/java \
+                                    -Dsonar.junit.reportPaths=target/surefire-reports \
+                                    -Dsonar.token=$SONAR_TOKEN_SECURE \
+                                    -Dsonar.host.url=http://host.docker.internal:9000
+                                """
+                            }
+                        }
                     }
                 }
             }
