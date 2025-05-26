@@ -29,17 +29,15 @@ pipeline {
         // }
 
         // Étape 2 : Analyse SonarQube
-         stages {
-            stage('SonarQube Analysis') {
-                steps {
-                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                        bat """
-                            sonar-scanner \
-                            -Dsonar.projectKey=jenkins \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=%SONAR_TOKEN%
-                        """
-                    }
+        stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    bat """
+                        sonar-scanner \
+                        -Dsonar.projectKey=jenkins \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=%SONAR_TOKEN%
+                    """
                 }
             }
         }
