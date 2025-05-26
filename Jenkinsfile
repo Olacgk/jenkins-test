@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
-        SONAR_TOKEN = credentials('sonar-token')
+        SONAR_SCANNER_HOME = tool 'SonarQube'
+        SONAR_TOKEN = credentials('SonarQube_token')
     }
 
     stages {
@@ -33,9 +33,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh "${SonarQube}/bin/sonar-scanner -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SonarQube_token}"
+                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
                     } else {
-                        bat "${SonarQube}\\bin\\sonar-scanner.bat -Dsonar.projectKey=my-project -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SonarQube_token}"
+                        bat "${SONAR_SCANNER_HOME}\\bin\\sonar-scanner.bat -Dsonar.projectKey=my-project -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
                     }
                 }
             }
