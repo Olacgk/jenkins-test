@@ -47,7 +47,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     script {
                         def scannerHome = tool 'SonarQubeScanner'
-                        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN_SECURE')]) {
+                        withCredentials([string(credentialsId: 'SonarQube_token', variable: 'SONAR_TOKEN_SECURE')]) {
                             if (isUnix()) {
                                 sh """
                                     ${scannerHome}/bin/sonar-scanner \
