@@ -31,9 +31,9 @@ pipeline {
         // Étape 2 : Analyse SonarQube
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId: 'SONAR_SCANNER_HOME', variable: 'SONAR_TOKEN')]) {
                     bat """
-                        sonar-scanner \
+                        SONAR_SCANNER_HOME \
                         -Dsonar.projectKey=jenkins \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.login=%SONAR_TOKEN%
