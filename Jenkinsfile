@@ -35,7 +35,7 @@ pipeline {
                     if (isUnix()) {
                         sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
                     } else {
-                        bat "${SONAR_SCANNER_HOME}\\bin\\sonar-scanner.bat -Dsonar.projectKey=my-project -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
+                        bat "${SONAR_SCANNER_HOME}\\bin\\sonar-scanner.bat -Dsonar.projectKey=jenkins -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_TOKEN}"
                     }
                 }
             }
