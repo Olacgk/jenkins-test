@@ -65,6 +65,54 @@ pipeline {
                 }
             }
         }
+        // Étape 3 : Compilation et tests
+        stage('Compilation et Tests') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'mvn clean package'
+                    } else {
+                        bat 'mvn clean package'
+                    }
+                }
+            }
+        }
+        // Étape 4 : Publication des rapports de test
+        stage('Publication des Rapports de Test') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'mvn surefire-report:report-only'
+                    } else {
+                        bat 'mvn surefire-report:report-only'
+                    }
+                }
+            }
+        }
+        // Étape 5 : Notification de fin de pipeline
+        stage('Notification de Fin de Pipeline') {
+            steps {
+                script {
+                    if (currentBuild.result == 'SUCCESS') {
+                        echo 'Pipeline terminé avec succès.'
+                    } else {
+                        error 'Pipeline échoué.'
+                    }
+                }
+            }
+        }
+        // Étape 6 : Nettoyage
+        stage('Nettoyage') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'mvn clean'
+                    } else {
+                        bat 'mvn clean'
+                    }
+                }
+            }
+        }
 
     }
 
