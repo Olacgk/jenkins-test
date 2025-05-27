@@ -89,19 +89,7 @@ pipeline {
                 }
             }
         }
-        // Étape 5 : Notification de fin de pipeline
-        stage('Notification de Fin de Pipeline') {
-            steps {
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        echo 'Pipeline terminé avec succès.'
-                    } else {
-                        error 'Pipeline échoué.'
-                    }
-                }
-            }
-        }
-        // Étape 6 : Nettoyage
+        // Étape 5 : Nettoyage
         stage('Nettoyage') {
             steps {
                 script {
